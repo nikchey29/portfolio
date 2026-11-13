@@ -1,0 +1,154 @@
+/* One contour per surface. The lit part is a short lead, fading coals and vapor. */
+:where([data-ember]) { position:relative; }
+[data-ember] > .ember-edge {
+  --wisp-width:110px;
+  --wisp-height:31px;
+  --ember-glow:.82;
+  position:absolute; inset:0; display:block; z-index:2;
+  margin:0; grid-area:auto; overflow:clip; overflow-clip-margin:9px; border-radius:inherit; pointer-events:none;
+}
+[data-ember] > .ember-edge > span {
+  pointer-events:none; display:none; position:absolute; left:0; top:0; margin:0; grid-area:auto;
+}
+[data-ember-live] > .ember-edge > span { display:block; }
+[data-ember] > .ember-edge > span {
+  --part-opacity:1;
+  offset-path:var(--ember-path,none);
+  offset-rotate:auto;
+  animation:ember-run var(--ember-time,4s) var(--ember-pace,linear) calc(var(--ember-start,-1s) + var(--trail-delay,0s)) infinite;
+}
+@keyframes ember-run {
+  from { offset-distance:0%; }
+  to { offset-distance:100%; }
+}
+@keyframes ember-line-fade {
+  0%,100% { opacity:0; }
+  8%,90% { opacity:var(--part-opacity); }
+}
+[data-ember-wake]:not([data-ember-open]) > .ember-edge > span {
+  animation:ember-run var(--ember-wake) var(--ember-wake-pace) calc(-.14s + var(--trail-delay,0s)) 1 both,
+    ember-line-fade var(--ember-wake) linear calc(-.14s + var(--trail-delay,0s)) 1 both;
+}
+
+.ember-edge > .ember-lead {
+  width:20px; height:8px; offset-anchor:84% 50%;
+}
+.ember-lead::before,.ember-lead::after {
+  content:""; position:absolute; pointer-events:none;
+}
+.ember-lead::before {
+  inset:-2px -6px;
+  background:radial-gradient(ellipse at 71% 50%,#ff9f66d9 2%,#ff6b3894 25%,#ec391449 48%,transparent 73%);
+}
+.ember-lead::after {
+  inset:2px 0;
+  background:linear-gradient(90deg,transparent,#ff6b32 38%,#ffb472 58%,#fff0c6 86%,transparent);
+  clip-path:polygon(0 53%,26% 46%,48% 20%,65% 35%,84% 5%,100% 49%,80% 77%,63% 65%,48% 86%,20% 62%);
+}
+.ember-edge > .ember-echo,.ember-edge > .ember-coal {
+  width:18px; height:6px; offset-anchor:75% 50%; --trail-delay:.052s;
+  background:radial-gradient(ellipse closest-side,#ffbd6c 4%,#fd6b31db 31%,#e0471b50 61%,transparent);
+}
+.ember-edge > .ember-coal {
+  width:13px; height:4px; --trail-delay:.115s;
+  background:radial-gradient(ellipse closest-side,#ff963baf 7%,#c83d1ea6 42%,transparent);
+}
+.ember-coal::before,.ember-echo::before {
+  content:""; position:absolute; left:35%; top:-3px; width:3px; height:1px;
+  transform:rotate(-27deg); border-radius:50%;
+  background:#ffb063; box-shadow:-5px -3px 0 #fb73326a,0 0 3px #ff662b;
+}
+.ember-coal::before { left:62%; top:-4px; background:#ff824f; }
+.ember-edge > .ember-wisp {
+  width:var(--wisp-width); height:var(--wisp-height); --trail-delay:.12s;
+  --part-opacity:var(--ember-glow);
+  offset-anchor:91% 80%; opacity:var(--ember-glow);
+  background:url('/assets/ember-wisp.c4f8cea17205.svg') center / 100% 100% no-repeat;
+}
+[data-ember-open][data-ember-live] > .ember-edge > span {
+  animation-name:ember-run,ember-line-fade;
+}
+[data-ember-open] > .ember-edge > .ember-wisp { --ember-glow:.69; }
+
+/* Real panel borders carry the material; smaller shapes share its colour, with less spill. */
+[data-chakra="on"] :is([data-ember="frame"],[data-ember="control"],[data-ember="detail"]) {
+  border-color:#76452e;
+}
+[data-chakra="on"] [data-ember="frame"] {
+  --surface-light:radial-gradient(ellipse at 100% 0%,#8e422425,transparent 62%);
+  background:var(--surface-light),linear-gradient(145deg,#221613,#15100f 72%);
+  box-shadow:0 14px 38px #0006;
+  border-radius:10px;
+}
+[data-chakra="on"] :is(.resume-preview,.about-image,[data-ember].frame-popover,[data-ember].toast) {
+  background:var(--surface);
+  border-radius:8px;
+}
+[data-chakra="on"] .resume-preview { background:#fff; }
+[data-chakra="on"] .frame-popover { box-shadow:0 14px 40px #000a; }
+[data-chakra="on"] .toast { box-shadow:0 8px 30px #0009; }
+.about-image { border:1px solid var(--art-line); border-radius:8px; }
+.about-image > img,.resume-preview > img { border-radius:inherit; }
+[data-chakra="on"] :is(.technical-art,.profile-portrait,.resume-preview)[data-ember] { overflow:visible; }
+[data-chakra="on"] .table-frame { border-radius:8px; }
+[data-chakra="on"] [data-ember="detail"] { border-color:#613924; }
+[data-chakra="on"] .forge-face[data-ember] {
+  border-color:#ad6c46;
+  box-shadow:inset 0 1px 0 #ffce9b64,inset 0 -2px 0 #190b07,0 0 10px #ef67262e;
+}
+[data-ember="detail"] > .ember-edge,.resume-preview > .ember-edge {
+  --wisp-width:48px; --wisp-height:12px; --ember-glow:.53;
+}
+[data-ember="detail"] > .ember-edge > .ember-lead { width:11px; height:7px; }
+[data-chakra="on"] :is([data-ember="top"],[data-ember="bottom"],[data-ember="band"],[data-ember="left"],[data-ember="column"]) {
+  border-color:#4e2d22; border-image:none;
+}
+[data-chakra="on"] .scope-note[data-ember="left"] { border-color:#aa5835; }
+:is(.page-intro,.case-intro)[data-ember] { border-bottom:1px solid var(--line); }
+.page-intro[data-ember]:has(+ .projects-index),.case-intro[data-ember]:has(> .case-stats) { border-bottom:0; }
+.page-intro[data-ember]:has(+ .projects-index) > .ember-edge,
+.case-intro[data-ember]:has(> .case-stats) > .ember-edge { display:none; }
+[data-ember="band"] > .ember-edge,[data-ember="top"] > .ember-edge,[data-ember="bottom"] > .ember-edge {
+  --wisp-height:24px;
+}
+[data-ember="column"] > .ember-edge,[data-ember="left"] > .ember-edge {
+  --wisp-width:64px; --wisp-height:16px;
+}
+.profile-evidence > :first-child > .ember-edge,
+.approach-grid > :first-child > .ember-edge,.evidence-inner > :first-child > .ember-edge,
+.case-stats > :first-child > .ember-edge,.timeline > :first-child > .ember-edge,
+.source-links > a:last-of-type > .ember-edge { display:none; }
+
+[data-ember="control"] > .ember-edge { --wisp-width:58px; --wisp-height:15px; --ember-glow:.86; }
+[data-chakra="on"] [data-ember="control"]:not(.gate-toggle) { border-radius:7px; }
+[data-ember="control"] > .ember-edge > .ember-lead { width:15px; height:7px; }
+[data-ember="control"] > .ember-edge > .ember-echo { width:10px; height:5px; }
+[data-ember="control"] > .ember-edge > .ember-coal { width:8px; height:3px; }
+[data-chakra="on"] .button-primary[data-ember] { border-color:#ffc387; }
+[data-chakra="on"] [data-ember="control"]:is(:hover,:focus-visible,[aria-current],[aria-pressed="true"]):not(:disabled) { border-color:#eb9b67; }
+[data-chakra="on"] .project-filter button[aria-pressed="true"] { border-color:#ffd5a4; }
+[data-chakra="on"] .navigation > a {
+  padding:8px 9px; border:1px solid #452a20; border-radius:7px;
+  background:#120d0c;
+}
+[data-chakra="on"] .navigation > a[aria-current] { background:#271710; border-color:#b9724b; }
+[data-chakra="on"] .navigation > a::after { display:none; }
+.js .menu-toggle[data-ember],.copy-email[data-ember] {
+  border:1px solid var(--art-line); border-radius:6px; min-height:44px;
+}
+.js .menu-toggle[data-ember] { padding-inline:6px; }
+.copy-email[data-ember] { padding:7px 11px; margin-top:9px; }
+.gate-toggle[data-ember] > .ember-edge { --wisp-width:87px; --wisp-height:22px; --ember-glow:.91; }
+.toast:not(.is-visible) > .ember-edge { display:none; }
+
+@media (min-width:761px) and (max-width:1100px) {
+  [data-chakra="on"] .navigation { gap:9px; }
+  [data-chakra="on"] .navigation > a { padding-inline:5px; }
+}
+@media (max-width:760px) {
+  [data-chakra="on"] .navigation.is-open { gap:6px; }
+  [data-chakra="on"] .navigation > a { padding:8px 11px; }
+  .case-toc > [data-ember="column"] > .ember-edge { display:none; }
+}
+@media(prefers-reduced-motion:reduce) { .ember-edge > span { display:none!important; animation:none!important; } }
+@media(forced-colors:active),print { .ember-edge { display:none!important; } }

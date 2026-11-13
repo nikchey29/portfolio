@@ -1,0 +1,446 @@
+/* The sealed chamber, the camera push, and the page cuts are separate layers. */
+:root[data-chakra="off"] {
+  --bg:#08090c; --surface:#0d1015; --surface-2:#151920;
+  --line:#29313c; --halo:#8896a70c; --glow:#a1acbf10;
+  --art-surface:#10141a; --art-ground:#0b0d11;
+}
+:root {
+  scrollbar-gutter:stable;
+  --pace-zoom:cubic-bezier(.22,.61,.29,1);
+  --pace-light:cubic-bezier(.24,.53,.33,1);
+  --pace-aura:cubic-bezier(.28,.51,.35,1);
+  --pace-dissolve:cubic-bezier(.44,.02,.3,1);
+  --pace-close:cubic-bezier(.42,0,.23,1);
+  --pace-charge:cubic-bezier(.28,.74,.42,1);
+  --pace-catch:cubic-bezier(.12,.65,.3,1);
+  --pace-breath:ease-in-out;
+  --pace-out:cubic-bezier(.34,.72,.27,1);
+  --pace-in:cubic-bezier(.18,.63,.32,1);
+}
+.chakra-gate { display:none; position:fixed; inset:0; z-index:100; place-items:center; overflow:hidden; overscroll-behavior:contain; isolation:isolate; }
+[data-gate] { overflow:hidden; }
+[data-gate] .chakra-gate { display:grid; }
+[data-gate] .portfolio-content { pointer-events:none; }
+[data-gate]:not([data-release]):not([data-gate="closing"]) :is(.portfolio-content,.chakra-atmosphere) { visibility:hidden; }
+/* Two separate shots: the camera pushes through the seal, then pulls back past the tails. */
+.gate-shot,.gate-chamber,.gate-reveal,.gate-plate,.gate-flare {
+  position:absolute; inset:0; pointer-events:none;
+}
+.gate-shot { background:#060807; overflow:hidden; }
+.gate-chamber,.gate-reveal { transform:translateZ(0); }
+.gate-chamber { transform-origin:50% 49%; }
+.gate-plate,.gate-plate .gate-art { display:block; width:100%; height:100%; }
+.gate-plate .gate-art { object-fit:cover; object-position:50% 48%; }
+.gate-sealed-plate::after,.gate-release-plate::after {
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(0deg,#030604b0,transparent 31%),
+    radial-gradient(ellipse at 53% 39%,transparent 42%,#0206048a);
+}
+.gate-release-plate::after {
+  background:linear-gradient(0deg,#100603b8,transparent 25%);
+}
+.gate-eye-light {
+  position:absolute; inset:0; opacity:.22;
+  background:radial-gradient(ellipse 17% 19% at 57% 30%,#ed331638,transparent 77%),
+    radial-gradient(ellipse 31% 17% at 50% 100%,#ed531732,transparent 76%);
+}
+.gate-reveal { opacity:0; transform-origin:50% 53%; }
+.gate-flare {
+  opacity:0; transform-origin:50% 53%;
+  background:radial-gradient(ellipse 56% 49% at 50% 58%,#ffbb59ad,#e8340959 57%,transparent 100%);
+}
+.gate-smoke { position:absolute; width:min(100%,720px); height:clamp(210px,42svh,350px);
+  top:65%; left:50%; translate:-50% -50%; pointer-events:none; }
+.gate-smoke .gate-plume {
+  position:absolute; inset:auto auto 0 4%; width:54%; height:100%; opacity:.53;
+  background:url('/assets/chakra-smoke.45c0d106a0d8.webp') center bottom / contain no-repeat;
+  transform-origin:60% 90%; --curl-side:1; --curl-tilt:-18deg;
+  transform:translate3d(-11px,-9px,0) rotate(var(--curl-tilt)) scaleX(var(--curl-side));
+}
+.gate-smoke .gate-plume-right {
+  left:auto; right:4%; width:55%; --curl-side:-1; --curl-tilt:16deg; opacity:.49;
+}
+/* The front embers travel farther and faster than the distant field. */
+.gate-coals {
+  position:absolute; left:50%; top:47%; width:min(96vw,1100px); height:64%;
+  translate:-50% 0; opacity:.12; pointer-events:none;
+  background:url('/assets/chakra-cinders.514e5bc79519.webp') center / 100% 100% no-repeat;
+}
+.gate-coals-front {
+  top:55%; width:min(114vw,1420px); opacity:0; rotate:-6deg; scale:-1 1;
+}
+.gate-center {
+  display:grid; place-items:center; position:absolute; top:min(88%,calc(100% - 94px)); left:50%; translate:-50% -50%; z-index:1;
+}
+.gate-breath {
+  position:absolute; width:min(430px,94vw); height:160px; opacity:.66; pointer-events:none;
+  background:radial-gradient(ellipse 36% 36% at 50% 55%,#c836204b,#8720142f 52%,transparent),
+    radial-gradient(ellipse 48% 38% at 50% 62%,#81182838,transparent);
+}
+.gate-toggle {
+  position:relative; display:inline-flex; align-items:center; gap:15px;
+  min-height:54px; padding:0 13px 0 18px; border:1px solid #c25c39; border-radius:7px;
+  color:#fff2e8; background:linear-gradient(150deg,#341512,#140c0c 75%);
+  box-shadow:0 0 28px #e63e253c, inset 0 1px 0 #ffd2a74a;
+  font:700 14px/1 var(--sans); white-space:nowrap;
+}
+.gate-toggle strong {
+  color:#ffd1ae; border:1px solid #7b3a2b; background:#261312;
+  font:400 10px/1 var(--mono); text-transform:uppercase; letter-spacing:.11em;
+  padding:7px 8px; border-radius:4px;
+}
+.gate-toggle:hover { border-color:#ffb475; }
+.gate-toggle:focus-visible { outline-color:#ffc38e; outline-offset:4px; }
+.gate-toggle[aria-disabled="true"] { cursor:wait; }
+.gate-sound {
+  position:absolute; top:calc(100% + 9px); left:50%; translate:-50% 0;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  min-height:44px; min-width:112px; padding:0 12px; border:1px solid #784239; border-radius:6px;
+  color:#f8d4bd; background:#160c0ded; font:600 11px/1.35 var(--sans); white-space:nowrap;
+}
+.gate-sound:hover,.gate-sound:focus-visible { border-color:#ffc38e; color:#fff2e8; }
+.gate-sound .icon { width:15px; height:15px; }
+.gate-sound strong { font-weight:800; }
+.gate-sound[aria-pressed="true"] .sound-slash,.gate-sound[aria-pressed="false"] .sound-wave { display:none; }
+.gate-caption {
+  position:fixed; z-index:101; left:50%; bottom:clamp(20px,8svh,86px); translate:-50% 0;
+  width:max-content; max-width:calc(100% - 24px); margin:0; padding:8px 14px;
+  background:#100704df; border-radius:4px; color:#fff2e3; text-align:center;
+  font:650 clamp(13px,1.32vw,17px)/1.42 var(--sans); visibility:hidden; pointer-events:none;
+}
+[data-gate="opening"] .gate-caption,[data-welcome-playing]:not([data-gate="closed"]) .gate-caption { visibility:visible; }
+[data-awakening="charge"] .gate-center { pointer-events:none; }
+
+/* A shared breathing rhythm, with the two plumes drifting out of phase. */
+[data-motion="on"][data-gate="closed"]:not([data-awakening]) .gate-breath {
+  animation:flame-breath 2400ms var(--pace-breath) -580ms infinite alternate;
+}
+[data-motion="on"][data-gate="closed"]:not([data-awakening]) .gate-eye-light {
+  animation:gate-eye-breathe 2400ms var(--pace-breath) -580ms infinite alternate;
+}
+[data-motion="on"][data-gate="closed"]:not([data-awakening]) .gate-plume {
+  animation:smoke-rise 4200ms linear -1100ms infinite;
+}
+[data-motion="on"][data-gate="closed"]:not([data-awakening]) .gate-plume-right { animation-delay:-2380ms; }
+[data-motion="on"][data-gate="closed"]:not([data-awakening]) .gate-coals-back {
+  animation:gate-coals-rise 3400ms ease-out -980ms infinite;
+}
+@keyframes flame-breath {
+  from { opacity:.45; transform:scale3d(.88,.86,1); }
+  to { opacity:.94; transform:scale3d(1.06,1.06,1); }
+}
+@keyframes gate-eye-breathe { from {opacity:.16} to {opacity:.78} }
+@keyframes smoke-rise {
+  0% { opacity:0; transform:translate3d(3%,12%,0) rotate(var(--curl-tilt)) scale3d(calc(.72 * var(--curl-side)),.8,1); }
+  27% { opacity:.54; }
+  67% { opacity:.34; }
+  100% { opacity:0; transform:translate3d(-4%,-18%,0) rotate(var(--curl-tilt)) scale3d(calc(1.13 * var(--curl-side)),1.17,1); }
+}
+@keyframes gate-coals-rise {
+  0% { opacity:0; transform:translate3d(-1%,9%,0); }
+  28%,65% { opacity:.24; }
+  100% { opacity:0; transform:translate3d(1%,-14%,0); }
+}
+
+[data-motion="on"][data-awakening] :is(.gate-chamber,.gate-reveal,.gate-flare) { will-change:transform,opacity; }
+[data-motion="on"][data-awakening="charge"] .gate-chamber { animation:gate-approach 300ms var(--pace-charge) both; }
+[data-motion="on"][data-awakening="charge"] .gate-smoke { animation:gate-inhale 300ms var(--pace-charge) both; }
+[data-motion="on"][data-awakening="charge"] .gate-center { animation:gate-control-away 300ms var(--pace-charge) both; }
+@keyframes gate-approach { to { transform:scale3d(1.10,1.10,1); } }
+@keyframes gate-inhale {
+  from {opacity:.86; transform:none;}
+  to {opacity:.23; transform:translate3d(0,-4%,0) scale3d(.59,.81,1);}
+}
+@keyframes gate-control-away {
+  from {opacity:1; transform:none;}
+  to {opacity:0; transform:translate3d(0,8px,0) scale3d(.96,.96,1);}
+}
+[data-motion="on"][data-gate="opening"] .gate-center {opacity:0; pointer-events:none;}
+[data-motion="on"][data-gate="opening"] .gate-chamber {animation:gate-break 580ms var(--pace-light) both;}
+[data-motion="on"][data-gate="opening"] .gate-reveal {animation:gate-wide 1390ms var(--pace-zoom) both;}
+[data-motion="on"][data-gate="opening"] .gate-flare {animation:gate-heat 580ms var(--pace-light) both;}
+[data-motion="on"][data-gate="opening"] .gate-smoke {animation:gate-exhale 580ms var(--pace-light) both;}
+[data-motion="on"][data-gate="opening"] .gate-coals {animation:gate-coals-release 1260ms var(--pace-aura) both;}
+[data-motion="on"][data-gate="opening"] .gate-coals-front {animation-name:gate-coals-near; animation-delay:85ms;}
+[data-motion="on"][data-gate="opening"] :is(.gate-chamber,.gate-flare) {visibility:visible;}
+[data-motion="on"][data-release][data-gate="opening"] :is(.gate-chamber,.gate-smoke,.gate-flare) {display:none;}
+[data-motion="on"][data-release][data-gate="opening"] .gate-shot {animation:gate-dissolve 620ms var(--pace-dissolve) both;}
+[data-motion="on"][data-gate="closing"] :is(.gate-shot,.gate-center) {
+  animation:gate-dissolve 400ms var(--pace-close) reverse both;
+}
+@keyframes gate-break {
+  from {opacity:1;transform:scale3d(1.10,1.10,1);}
+  28% {opacity:.78;}
+  to {opacity:0;transform:scale3d(1.41,1.41,1);}
+}
+@keyframes gate-wide {
+  from {opacity:0;transform:scale3d(1.27,1.27,1);}
+  39% {opacity:1;}
+  to {opacity:1;transform:scale3d(1.02,1.02,1);}
+}
+@keyframes gate-heat {
+  0% {opacity:0;transform:scale3d(.68,.66,1);}
+  35% {opacity:.79;}
+  to {opacity:0;transform:scale3d(1.43,1.33,1);}
+}
+@keyframes gate-exhale {
+  from {opacity:.23;transform:translate3d(0,-4%,0) scale3d(.59,.81,1);}
+  45% {opacity:.45;}
+  to {opacity:0;transform:translate3d(0,-14%,0) scale3d(1.37,1.20,1);}
+}
+@keyframes gate-coals-release {
+  0% {opacity:0;transform:translate3d(0,14%,0) scale3d(.96,.94,1);}
+  32% {opacity:.83;}
+  68% {opacity:.51;}
+  100% {opacity:0;transform:translate3d(-4%,-47%,0) scale3d(1.08,1.13,1);}
+}
+@keyframes gate-coals-near {
+  0% {opacity:0;transform:translate3d(0,19%,0) scale3d(.94,.92,1);}
+  25% {opacity:.87;}
+  58% {opacity:.44;}
+  100% {opacity:0;transform:translate3d(-13%,-86%,0) scale3d(1.19,1.21,1);}
+}
+@keyframes gate-dissolve {from {opacity:1;} to {opacity:0;}}
+
+@media(max-width:760px) {
+  .gate-smoke {top:71%; width:116%;}
+  .gate-center {top:min(86%,calc(100% - 91px));}
+}
+@media(max-height:490px) and (orientation:landscape) {
+  .gate-center {top:min(75%,calc(100% - 89px));}
+  .gate-caption {bottom:13px;}
+}
+
+/* Warm typography settles just as the camera shot dissolves. */
+[data-motion="on"][data-awakening] .ignite { will-change:transform,opacity; }
+[data-motion="on"][data-awakening="surge"] .ignite {
+  animation:evidence-hit 450ms var(--pace-catch) var(--ignite-delay,550ms) both;
+}
+@keyframes evidence-hit { from { opacity:.62;transform:translate3d(0,7px,0); } to { opacity:1;transform:none; } }
+.ink-wipe { position:fixed; inset:0; z-index:52; pointer-events:none; overflow:hidden; visibility:hidden; contain:paint; }
+[data-gate] .cursor-light { display:none; }
+/* A dark shutter covers each navigation, with a diagonal leading edge and a trailing flash. */
+.ink-wipe { --cut-width:clamp(142px,24vw,316px); }
+.ink-wipe::before,.cut-light {
+  content:""; position:absolute; pointer-events:none; inset:-11% auto auto -18vh; height:122%;
+}
+.ink-wipe::before {
+  width:calc(100vw + 36vh);
+  background:linear-gradient(90deg,#ffd08c 0 1px,#a74124 2px,#1c0c09 14px,#050405 44px,
+     #050405 calc(100% - 52px),#48170c calc(100% - 15px),#fc7037 calc(100% - 3px),#fff0c6 calc(100% - 1px));
+}
+.cut-light {
+  width:var(--cut-width); opacity:0;
+  background:
+    url('/assets/ember-wisp.c4f8cea17205.svg') 84% 34% / 87% 50px no-repeat,
+    url('/assets/ember-wisp.c4f8cea17205.svg') 88% 67% / 98% 84px no-repeat,
+    url('/assets/ember-wisp.c4f8cea17205.svg') 76% 75% / 77% 39px no-repeat,
+    radial-gradient(ellipse 39% 31% at 89% 54%,#ff863d3c,transparent);
+}
+[data-motion="on"][data-ink] .ink-wipe { visibility:visible; }
+[data-motion="on"][data-ink="depart"] .ink-wipe::before { animation:edit-out 200ms var(--pace-out) both; }
+[data-motion="on"][data-ink="depart"] .cut-light {
+  left:calc(100vw + 18vh - .87 * var(--cut-width));
+  animation:edit-out 200ms var(--pace-out) both,cut-trail 200ms linear both;
+}
+[data-motion="on"][data-ink="arrive"] .ink-wipe::before { animation:edit-in 300ms var(--pace-in) both; }
+[data-motion="on"][data-ink="arrive"] .cut-light {
+  left:calc(-18vh - .87 * var(--cut-width));
+  animation:edit-in 300ms var(--pace-in) both,cut-trail 300ms linear both;
+}
+[data-motion="on"][data-ink="arrive"] :is(.hero-title,.page-intro h1,.case-intro h1) { animation:cut-title 300ms var(--pace-in) both; }
+@keyframes edit-out {
+  from { transform:translate3d(calc(-100vw - 38vh),0,0) skewX(-13deg); }
+  to { transform:translate3d(0,0,0) skewX(-13deg); }
+}
+@keyframes edit-in {
+  from { transform:translate3d(0,0,0) skewX(-13deg); }
+  to { transform:translate3d(calc(100vw + 38vh),0,0) skewX(-13deg); }
+}
+@keyframes cut-trail {
+  0%,100% { opacity:0; }
+  23%,63% { opacity:1; }
+}
+@keyframes cut-title { from { opacity:.77; transform:translate3d(17px,0,0); } to { opacity:1; transform:none; } }
+
+/* Performance controls stay out of the seal. */
+.site-header { backdrop-filter:none; }
+.brand-short { display:none; }
+.chakra-toggle { padding:7px 11px; min-height:44px; }
+.chakra-control-text { display:grid; gap:4px; text-align:left; }
+.chakra-state { text-align:left; }
+.frame-settings { position:relative; flex:none; display:none; }
+[data-chakra-ready] .frame-settings { display:block; }
+.frame-settings > summary {
+  list-style:none; min-width:42px; min-height:44px; display:grid; place-items:center;
+  border:1px solid var(--line); border-radius:6px; cursor:pointer; padding:0 7px;
+  color:var(--accent-strong); background:var(--surface); font:11px/1 var(--mono);
+}
+.frame-settings > summary::-webkit-details-marker { display:none; }
+.frame-settings[open] > summary,.frame-settings > summary:hover { border-color:var(--accent); }
+.frame-popover {
+  position:absolute; z-index:65; inset:calc(100% + 11px) -4px auto auto; width:min(266px,calc(100vw - 42px));
+  border:1px solid var(--art-line); border-radius:8px; padding:13px; background:var(--surface);
+  box-shadow:0 16px 34px #000a;
+}
+.frame-popover > p:first-child { font-size:13px; font-weight:750; color:var(--text); margin:0 0 9px; }
+.frame-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+.frame-options > button {
+  min-height:40px; border-radius:5px; border:1px solid var(--line); padding:3px; white-space:nowrap;
+  color:var(--muted); background:var(--surface-2); font:10px/1 var(--mono);
+}
+.frame-options > button:hover,.frame-options > button[aria-pressed="true"] { border-color:var(--accent); color:var(--accent-strong); }
+.frame-feedback { margin:9px 0 0; font-size:11px; line-height:1.55; }
+.sound-toggle {
+  display:flex; align-items:center; justify-content:space-between; width:100%; gap:8px;
+  min-height:39px; margin-top:10px; padding:5px 8px; border:1px solid var(--line); border-radius:5px;
+  background:var(--surface-2); color:var(--muted); font:650 11px/1.3 var(--sans); text-align:left;
+}
+.sound-toggle:hover,.sound-toggle[aria-pressed="true"] { border-color:var(--art-line); color:var(--text); }
+.welcome-replay:disabled { opacity:.57; cursor:default; }
+.welcome-feedback { margin:7px 0 0; color:var(--muted); font-size:11px; line-height:1.5; }
+.sound-state { color:var(--accent-strong); font:10px/1 var(--mono); }
+@media (max-width:760px) {
+  .frame-popover { right:-36px; }
+  .frame-settings > summary { min-width:36px; }
+  .chakra-toggle { padding-inline:7px; gap:5px; }
+}
+@media (max-width:420px) {
+  .brand-name { display:none; }
+  .brand-short { display:inline; font:700 17px/1 var(--display); color:var(--text); letter-spacing:.04em; }
+  .brand { min-height:44px; min-width:34px; display:flex; align-items:center; }
+  .chakra-toggle .chakra-indicator { width:7px; height:7px; }
+}
+
+/* The homepage profile keeps the real portrait and project evidence together. */
+.hero-stage { background:#08090c; }
+.shinobi-horizon {
+  position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:radial-gradient(ellipse at 78% 65%,#6e8ea31a,transparent 63%);
+}
+.shinobi-horizon::after {
+  content:""; position:absolute; inset:0; opacity:0;
+  background:radial-gradient(ellipse at 88% 100%,#e25a2e34,transparent 63%),
+    radial-gradient(ellipse at 74% 53%,#8a361e29,transparent 61%);
+}
+[data-chakra="on"] .shinobi-horizon::after { opacity:1; }
+.profile-panel {
+  width:100%; max-width:580px; min-width:0; justify-self:end; align-self:center;
+  border:1px solid var(--art-line); border-radius:10px;
+  background:var(--surface); box-shadow:0 18px 55px #0006;
+}
+.profile-slate { border-radius:inherit; }
+.profile-evidence { border-radius:0 0 9px 9px; }
+.profile-evidence > a:first-child { border-bottom-left-radius:inherit; }
+.profile-evidence > a:last-of-type { border-bottom-right-radius:inherit; }
+.profile-slate { display:flex; justify-content:space-between; align-items:center; gap:8px; padding-inline:15px; color:var(--muted); }
+.profile-slate { min-height:42px; border-bottom:1px solid var(--art-line); font:10px/1 var(--mono); letter-spacing:.1em; }
+.profile-body { aspect-ratio:16/9; min-height:203px; display:grid; background:var(--art-ground); }
+.profile-grid {
+  display:grid; grid-template-columns:minmax(82px,.88fr) minmax(0,1.15fr);
+  gap:clamp(11px,2.2vw,25px); align-items:center; padding:clamp(12px,2.15vw,27px);
+}
+.profile-portrait { border:1px solid var(--art-line); border-radius:6px; overflow:hidden; width:100%; aspect-ratio:4/5; max-width:177px; justify-self:center; }
+.profile-portrait img { width:100%; height:100%; object-fit:cover; object-position:50% 40%; }
+.profile-info > .profile-kicker { margin:0 0 8px; color:var(--accent-strong); font:9px/1.4 var(--mono); letter-spacing:.08em; }
+.profile-info h2 { font-size:clamp(25px,2.84vw,44px); text-wrap:balance; }
+.profile-info h2 span { color:var(--accent); }
+.profile-info p { margin:8px 0 0; font-size:12px; line-height:1.45; }
+.profile-link {
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:44px;
+  border:1px solid var(--art-line); background:var(--surface-2); color:var(--text);
+  border-radius:5px; padding:5px 9px; font:700 11px/1.4 var(--sans);
+}
+.profile-link { margin-top:12px; }
+.profile-link .icon { width:15px; height:15px; color:var(--accent-strong); }
+.profile-link:hover { border-color:var(--accent); }
+.profile-evidence { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); border-top:1px solid var(--art-line); }
+.profile-evidence a { display:grid; grid-template-columns:1fr auto; align-items:center; padding:10px 15px; gap:3px 7px; }
+.profile-evidence a+a { border-left:1px solid var(--art-line); }
+.profile-evidence a:hover { background:var(--surface-2); }
+.profile-evidence span { grid-column:1 / -1; font:9px/1 var(--mono); letter-spacing:.09em; color:var(--muted); }
+.profile-evidence strong { color:var(--accent-strong); font:700 13px/1.25 var(--sans); }
+.profile-evidence .icon { width:14px; height:14px; color:var(--accent-strong); }
+@media (max-width:760px) {
+  .profile-panel { justify-self:center; }
+  [data-chakra="on"] .chakra-atmosphere svg { opacity:.12; }
+}
+@media (max-width:390px) {
+  .profile-slate { padding-inline:10px; }
+  .profile-evidence a { padding-inline:10px; }
+  .profile-grid { grid-template-columns:minmax(70px,.66fr) minmax(0,1.3fr); }
+}
+@media (prefers-reduced-motion:reduce) {
+  .chakra-gate *,.ignite { animation:none!important; }
+  .ink-wipe { display:none!important; }
+}
+@media print {
+  .chakra-gate { display:none!important; }
+  [data-gate] .portfolio-content { visibility:visible; }
+  [data-gate] { overflow:visible; }
+}
+
+/* A pierced steel shuriken. Only its transforms move during a turn. */
+.shuriken-stage {
+  position:relative; display:grid; place-items:center; isolation:isolate; overflow:hidden;
+  aspect-ratio:1.89; min-height:192px; cursor:pointer;
+  border-bottom:1px solid var(--art-line);
+  background:
+    radial-gradient(ellipse at 53% 72%,#602d1f65 1%,#191116 50%,#0e1015 86%),
+    #0c1015;
+}
+.shuriken-stage::before {
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(119deg,transparent 0 34px,#ac9eab0b 34px 35px,transparent 36px 65px);
+}
+.shuriken-field {
+  position:absolute; width:44%; aspect-ratio:1; max-width:222px; min-width:135px;
+  border-radius:50%; border:1px solid #bb7a5375;
+  box-shadow:0 0 0 8px #ba7c5324,0 0 0 20px #bb7a5315,inset 0 0 40px #ba59252a;
+  background:radial-gradient(circle,#e179321f,transparent 75%);
+}
+.shuriken-field::after {
+  content:""; position:absolute; inset:10%; border-radius:50%; border:1px dashed #e1a47b53;
+}
+.shuriken-space {
+  --blade-size:clamp(146px,20vw,241px);
+  position:relative; width:var(--blade-size); aspect-ratio:1; contain:layout paint;
+}
+.shuriken-face,.shuriken-canvas { position:absolute; width:100%; height:100%; inset:0; }
+.shuriken-face { transform:rotate(17deg) rotateY(-18deg); }
+.shuriken-canvas {
+  visibility:hidden; contain:strict; transform:translateZ(0);
+  animation:shuriken-idle-turn 15s linear infinite paused;
+}
+[data-moving]:not([data-flipping]) .shuriken-canvas { animation-play-state:running; }
+[data-frame-limit="60"] .shuriken-canvas { animation-timing-function:steps(900,end); }
+[data-frame-limit="120"] .shuriken-canvas { animation-timing-function:steps(1800,end); }
+@keyframes shuriken-idle-turn { from {transform:translateZ(0) rotate(0turn);} to {transform:translateZ(0) rotate(1turn);} }
+[data-renderer="canvas"] .shuriken-canvas { visibility:visible; }
+[data-renderer="canvas"] .shuriken-face { visibility:hidden; }
+.shuriken-spin {
+  min-height:34px; margin:3px 0; padding:3px 9px; border:1px solid var(--art-line); border-radius:5px;
+  background:var(--surface-2); color:var(--accent-strong); font:11px/1 var(--mono);
+}
+.shuriken-spin:hover:not(:disabled) { border-color:var(--accent); }
+.shuriken-spin:disabled { opacity:.52; }
+.profile-body { min-height:0; aspect-ratio:auto; }
+.profile-grid { grid-template-columns:65px minmax(0,1fr); gap:13px; padding:12px 16px; }
+.profile-portrait { aspect-ratio:1; }
+.profile-info h2 { font-size:clamp(21px,2.2vw,28px); }
+.profile-info .profile-kicker { margin-bottom:4px; }
+.profile-info p { margin-top:3px; }
+.profile-link { margin-top:6px; min-height:32px; }
+@media (max-width:760px) {
+  .shuriken-space { --blade-size:clamp(131px,39vw,223px); }
+}
+@media (max-width:410px) {
+  .profile-grid { padding:10px 12px; gap:10px; }
+}
+
+:root[data-frame-limit="60"]{--pace-zoom:steps(83, jump-end);--pace-light:steps(34, jump-end);--pace-aura:steps(75, jump-end);--pace-close:steps(24, jump-end);--pace-charge:steps(18, jump-end);--pace-catch:steps(27, jump-end);--pace-out:steps(12, jump-end);--pace-in:steps(18, jump-end);--pace-dissolve:steps(37, jump-end);--pace-breath:steps(144, jump-end)}
+:root[data-frame-limit="120"]{--pace-zoom:steps(166, jump-end);--pace-light:steps(69, jump-end);--pace-aura:steps(151, jump-end);--pace-close:steps(48, jump-end);--pace-charge:steps(36, jump-end);--pace-catch:steps(54, jump-end);--pace-out:steps(24, jump-end);--pace-in:steps(36, jump-end);--pace-dissolve:steps(74, jump-end);--pace-breath:steps(288, jump-end)}
+@supports (animation-timing-function: linear(0, 1)) {
+:root[data-frame-limit="60"]{--pace-zoom:linear(0.00000 0.00000% 1.20482%,0.01861 1.20482% 2.40964%,0.03710 2.40964% 3.61446%,0.05546 3.61446% 4.81928%,0.07370 4.81928% 6.02410%,0.09181 6.02410% 7.22892%,0.10980 7.22892% 8.43373%,0.12765 8.43373% 9.63855%,0.14538 9.63855% 10.84337%,0.16298 10.84337% 12.04819%,0.18044 12.04819% 13.25301%,0.19778 13.25301% 14.45783%,0.21498 14.45783% 15.66265%,0.23205 15.66265% 16.86747%,0.24899 16.86747% 18.07229%,0.26579 18.07229% 19.27711%,0.28246 19.27711% 20.48193%,0.29899 20.48193% 21.68675%,0.31539 21.68675% 22.89157%,0.33164 22.89157% 24.09639%,0.34776 24.09639% 25.30120%,0.36374 25.30120% 26.50602%,0.37957 26.50602% 27.71084%,0.39527 27.71084% 28.91566%,0.41082 28.91566% 30.12048%,0.42622 30.12048% 31.32530%,0.44148 31.32530% 32.53012%,0.45660 32.53012% 33.73494%,0.47157 33.73494% 34.93976%,0.48638 34.93976% 36.14458%,0.50105 36.14458% 37.34940%,0.51557 37.34940% 38.55422%,0.52993 38.55422% 39.75904%,0.54414 39.75904% 40.96386%,0.55819 40.96386% 42.16867%,0.57209 42.16867% 43.37349%,0.58583 43.37349% 44.57831%,0.59941 44.57831% 45.78313%,0.61282 45.78313% 46.98795%,0.62608 46.98795% 48.19277%,0.63917 48.19277% 49.39759%,0.65209 49.39759% 50.60241%,0.66485 50.60241% 51.80723%,0.67743 51.80723% 53.01205%,0.68984 53.01205% 54.21687%,0.70208 54.21687% 55.42169%,0.71415 55.42169% 56.62651%,0.72603 56.62651% 57.83133%,0.73774 57.83133% 59.03614%,0.74926 59.03614% 60.24096%,0.76060 60.24096% 61.44578%,0.77175 61.44578% 62.65060%,0.78271 62.65060% 63.85542%,0.79348 63.85542% 65.06024%,0.80405 65.06024% 66.26506%,0.81442 66.26506% 67.46988%,0.82459 67.46988% 68.67470%,0.83456 68.67470% 69.87952%,0.84432 69.87952% 71.08434%,0.85386 71.08434% 72.28916%,0.86319 72.28916% 73.49398%,0.87230 73.49398% 74.69880%,0.88119 74.69880% 75.90361%,0.88984 75.90361% 77.10843%,0.89826 77.10843% 78.31325%,0.90644 78.31325% 79.51807%,0.91437 79.51807% 80.72289%,0.92205 80.72289% 81.92771%,0.92947 81.92771% 83.13253%,0.93662 83.13253% 84.33735%,0.94350 84.33735% 85.54217%,0.95009 85.54217% 86.74699%,0.95639 86.74699% 87.95181%,0.96238 87.95181% 89.15663%,0.96805 89.15663% 90.36145%,0.97338 90.36145% 91.56627%,0.97836 91.56627% 92.77108%,0.98296 92.77108% 93.97590%,0.98715 93.97590% 95.18072%,0.99091 95.18072% 96.38554%,0.99418 96.38554% 97.59036%,0.99690 97.59036% 98.79518%,0.99894 98.79518% 100.00000%,1 100%);--pace-light:linear(0.00000 0.00000% 2.94118%,0.04948 2.94118% 5.88235%,0.09793 5.88235% 8.82353%,0.14533 8.82353% 11.76471%,0.19166 11.76471% 14.70588%,0.23693 14.70588% 17.64706%,0.28112 17.64706% 20.58824%,0.32422 20.58824% 23.52941%,0.36622 23.52941% 26.47059%,0.40710 26.47059% 29.41176%,0.44685 29.41176% 32.35294%,0.48546 32.35294% 35.29412%,0.52291 35.29412% 38.23529%,0.55918 38.23529% 41.17647%,0.59427 41.17647% 44.11765%,0.62815 44.11765% 47.05882%,0.66081 47.05882% 50.00000%,0.69221 50.00000% 52.94118%,0.72236 52.94118% 55.88235%,0.75121 55.88235% 58.82353%,0.77874 58.82353% 61.76471%,0.80493 61.76471% 64.70588%,0.82975 64.70588% 67.64706%,0.85316 67.64706% 70.58824%,0.87512 70.58824% 73.52941%,0.89560 73.52941% 76.47059%,0.91454 76.47059% 79.41176%,0.93190 79.41176% 82.35294%,0.94760 82.35294% 85.29412%,0.96156 85.29412% 88.23529%,0.97370 88.23529% 91.17647%,0.98387 91.17647% 94.11765%,0.99190 94.11765% 97.05882%,0.99751 97.05882% 100.00000%,1 100%);--pace-aura:linear(0.00000 0.00000% 1.33333%,0.01993 1.33333% 2.66667%,0.03973 2.66667% 4.00000%,0.05940 4.00000% 5.33333%,0.07892 5.33333% 6.66667%,0.09831 6.66667% 8.00000%,0.11757 8.00000% 9.33333%,0.13668 9.33333% 10.66667%,0.15565 10.66667% 12.00000%,0.17449 12.00000% 13.33333%,0.19318 13.33333% 14.66667%,0.21172 14.66667% 16.00000%,0.23013 16.00000% 17.33333%,0.24838 17.33333% 18.66667%,0.26650 18.66667% 20.00000%,0.28446 20.00000% 21.33333%,0.30227 21.33333% 22.66667%,0.31994 22.66667% 24.00000%,0.33745 24.00000% 25.33333%,0.35481 25.33333% 26.66667%,0.37201 26.66667% 28.00000%,0.38906 28.00000% 29.33333%,0.40595 29.33333% 30.66667%,0.42268 30.66667% 32.00000%,0.43926 32.00000% 33.33333%,0.45567 33.33333% 34.66667%,0.47192 34.66667% 36.00000%,0.48800 36.00000% 37.33333%,0.50392 37.33333% 38.66667%,0.51966 38.66667% 40.00000%,0.53524 40.00000% 41.33333%,0.55065 41.33333% 42.66667%,0.56588 42.66667% 44.00000%,0.58093 44.00000% 45.33333%,0.59581 45.33333% 46.66667%,0.61051 46.66667% 48.00000%,0.62502 48.00000% 49.33333%,0.63935 49.33333% 50.66667%,0.65349 50.66667% 52.00000%,0.66745 52.00000% 53.33333%,0.68121 53.33333% 54.66667%,0.69477 54.66667% 56.00000%,0.70814 56.00000% 57.33333%,0.72130 57.33333% 58.66667%,0.73426 58.66667% 60.00000%,0.74702 60.00000% 61.33333%,0.75956 61.33333% 62.66667%,0.77189 62.66667% 64.00000%,0.78400 64.00000% 65.33333%,0.79589 65.33333% 66.66667%,0.80755 66.66667% 68.00000%,0.81898 68.00000% 69.33333%,0.83018 69.33333% 70.66667%,0.84113 70.66667% 72.00000%,0.85184 72.00000% 73.33333%,0.86229 73.33333% 74.66667%,0.87249 74.66667% 76.00000%,0.88242 76.00000% 77.33333%,0.89209 77.33333% 78.66667%,0.90147 78.66667% 80.00000%,0.91056 80.00000% 81.33333%,0.91935 81.33333% 82.66667%,0.92784 82.66667% 84.00000%,0.93600 84.00000% 85.33333%,0.94383 85.33333% 86.66667%,0.95131 86.66667% 88.00000%,0.95843 88.00000% 89.33333%,0.96516 89.33333% 90.66667%,0.97149 90.66667% 92.00000%,0.97737 92.00000% 93.33333%,0.98279 93.33333% 94.66667%,0.98768 94.66667% 96.00000%,0.99200 96.00000% 97.33333%,0.99565 97.33333% 98.66667%,0.99846 98.66667% 100.00000%,1 100%);--pace-close:linear(0.00000 0.00000% 4.16667%,0.08160 4.16667% 8.33333%,0.15972 8.33333% 12.50000%,0.23438 12.50000% 16.66667%,0.30556 16.66667% 20.83333%,0.37326 20.83333% 25.00000%,0.43750 25.00000% 29.16667%,0.49826 29.16667% 33.33333%,0.55556 33.33333% 37.50000%,0.60938 37.50000% 41.66667%,0.65972 41.66667% 45.83333%,0.70660 45.83333% 50.00000%,0.75000 50.00000% 54.16667%,0.78993 54.16667% 58.33333%,0.82639 58.33333% 62.50000%,0.85938 62.50000% 66.66667%,0.88889 66.66667% 70.83333%,0.91493 70.83333% 75.00000%,0.93750 75.00000% 79.16667%,0.95660 79.16667% 83.33333%,0.97222 83.33333% 87.50000%,0.98438 87.50000% 91.66667%,0.99306 91.66667% 95.83333%,0.99826 95.83333% 100.00000%,1 100%);--pace-charge:linear(0.00000 0.00000% 5.55556%,0.08740 5.55556% 11.11111%,0.17176 11.11111% 16.66667%,0.25302 16.66667% 22.22222%,0.33109 22.22222% 27.77778%,0.40588 27.77778% 33.33333%,0.47730 33.33333% 38.88889%,0.54523 38.88889% 44.44444%,0.60955 44.44444% 50.00000%,0.67012 50.00000% 55.55556%,0.72678 55.55556% 61.11111%,0.77934 61.11111% 66.66667%,0.82757 66.66667% 72.22222%,0.87120 72.22222% 77.77778%,0.90987 77.77778% 83.33333%,0.94312 83.33333% 88.88889%,0.97027 88.88889% 94.44444%,0.99019 94.44444% 100.00000%,1 100%);--pace-catch:linear(0.00000 0.00000% 3.70370%,0.08660 3.70370% 7.40741%,0.16865 7.40741% 11.11111%,0.24624 11.11111% 14.81481%,0.31943 14.81481% 18.51852%,0.38830 18.51852% 22.22222%,0.45292 22.22222% 25.92593%,0.51337 25.92593% 29.62963%,0.56974 29.62963% 33.33333%,0.62210 33.33333% 37.03704%,0.67054 37.03704% 40.74074%,0.71515 40.74074% 44.44444%,0.75602 44.44444% 48.14815%,0.79326 48.14815% 51.85185%,0.82694 51.85185% 55.55556%,0.85719 55.55556% 59.25926%,0.88410 59.25926% 62.96296%,0.90780 62.96296% 66.66667%,0.92840 66.66667% 70.37037%,0.94603 70.37037% 74.07407%,0.96083 74.07407% 77.77778%,0.97294 77.77778% 81.48148%,0.98253 81.48148% 85.18519%,0.98977 85.18519% 88.88889%,0.99487 88.88889% 92.59259%,0.99806 92.59259% 96.29630%,0.99963 96.29630% 100.00000%,1 100%);--pace-out:linear(0.00000 0.00000% 8.33333%,0.13750 8.33333% 16.66667%,0.26651 16.66667% 25.00000%,0.38680 25.00000% 33.33333%,0.49807 33.33333% 41.66667%,0.60000 41.66667% 50.00000%,0.69221 50.00000% 58.33333%,0.77424 58.33333% 66.66667%,0.84551 66.66667% 75.00000%,0.90527 75.00000% 83.33333%,0.95245 83.33333% 91.66667%,0.98537 91.66667% 100.00000%,1 100%);--pace-in:linear(0.00000 0.00000% 5.55556%,0.12819 5.55556% 11.11111%,0.24624 11.11111% 16.66667%,0.35440 16.66667% 22.22222%,0.45292 22.22222% 27.77778%,0.54206 27.77778% 33.33333%,0.62210 33.33333% 38.88889%,0.69332 38.88889% 44.44444%,0.75602 44.44444% 50.00000%,0.81054 50.00000% 55.55556%,0.85719 55.55556% 61.11111%,0.89635 61.11111% 66.66667%,0.92840 66.66667% 72.22222%,0.95378 72.22222% 77.77778%,0.97294 77.77778% 83.33333%,0.98643 83.33333% 88.88889%,0.99487 88.88889% 94.44444%,0.99903 94.44444% 100.00000%,1 100%);--pace-dissolve:linear(0.00000 0.00000% 2.70270%,0.02703 2.70270% 5.40541%,0.05405 5.40541% 8.10811%,0.08108 8.10811% 10.81081%,0.10811 10.81081% 13.51351%,0.13514 13.51351% 16.21622%,0.16216 16.21622% 18.91892%,0.18919 18.91892% 21.62162%,0.21622 21.62162% 24.32432%,0.24324 24.32432% 27.02703%,0.27027 27.02703% 29.72973%,0.29730 29.72973% 32.43243%,0.32432 32.43243% 35.13514%,0.35135 35.13514% 37.83784%,0.37838 37.83784% 40.54054%,0.40541 40.54054% 43.24324%,0.43243 43.24324% 45.94595%,0.45946 45.94595% 48.64865%,0.48649 48.64865% 51.35135%,0.51351 51.35135% 54.05405%,0.54054 54.05405% 56.75676%,0.56757 56.75676% 59.45946%,0.59459 59.45946% 62.16216%,0.62162 62.16216% 64.86486%,0.64865 64.86486% 67.56757%,0.67568 67.56757% 70.27027%,0.70270 70.27027% 72.97297%,0.72973 72.97297% 75.67568%,0.75676 75.67568% 78.37838%,0.78378 78.37838% 81.08108%,0.81081 81.08108% 83.78378%,0.83784 83.78378% 86.48649%,0.86486 86.48649% 89.18919%,0.89189 89.18919% 91.89189%,0.91892 91.89189% 94.59459%,0.94595 94.59459% 97.29730%,0.97297 97.29730% 100.00000%,1 100%);--pace-breath:steps(144, jump-end)}
+:root[data-frame-limit="120"]{--pace-zoom:linear(0.00000 0.00000% 0.60241%,0.00932 0.60241% 1.20482%,0.01861 1.20482% 1.80723%,0.02787 1.80723% 2.40964%,0.03710 2.40964% 3.01205%,0.04630 3.01205% 3.61446%,0.05546 3.61446% 4.21687%,0.06460 4.21687% 4.81928%,0.07370 4.81928% 5.42169%,0.08277 5.42169% 6.02410%,0.09181 6.02410% 6.62651%,0.10082 6.62651% 7.22892%,0.10980 7.22892% 7.83133%,0.11874 7.83133% 8.43373%,0.12765 8.43373% 9.03614%,0.13653 9.03614% 9.63855%,0.14538 9.63855% 10.24096%,0.15419 10.24096% 10.84337%,0.16298 10.84337% 11.44578%,0.17173 11.44578% 12.04819%,0.18044 12.04819% 12.65060%,0.18913 12.65060% 13.25301%,0.19778 13.25301% 13.85542%,0.20640 13.85542% 14.45783%,0.21498 14.45783% 15.06024%,0.22353 15.06024% 15.66265%,0.23205 15.66265% 16.26506%,0.24054 16.26506% 16.86747%,0.24899 16.86747% 17.46988%,0.25741 17.46988% 18.07229%,0.26579 18.07229% 18.67470%,0.27415 18.67470% 19.27711%,0.28246 19.27711% 19.87952%,0.29074 19.87952% 20.48193%,0.29899 20.48193% 21.08434%,0.30721 21.08434% 21.68675%,0.31539 21.68675% 22.28916%,0.32353 22.28916% 22.89157%,0.33164 22.89157% 23.49398%,0.33972 23.49398% 24.09639%,0.34776 24.09639% 24.69880%,0.35577 24.69880% 25.30120%,0.36374 25.30120% 25.90361%,0.37167 25.90361% 26.50602%,0.37957 26.50602% 27.10843%,0.38744 27.10843% 27.71084%,0.39527 27.71084% 28.31325%,0.40306 28.31325% 28.91566%,0.41082 28.91566% 29.51807%,0.41854 29.51807% 30.12048%,0.42622 30.12048% 30.72289%,0.43387 30.72289% 31.32530%,0.44148 31.32530% 31.92771%,0.44906 31.92771% 32.53012%,0.45660 32.53012% 33.13253%,0.46410 33.13253% 33.73494%,0.47157 33.73494% 34.33735%,0.47899 34.33735% 34.93976%,0.48638 34.93976% 35.54217%,0.49374 35.54217% 36.14458%,0.50105 36.14458% 36.74699%,0.50833 36.74699% 37.34940%,0.51557 37.34940% 37.95181%,0.52277 37.95181% 38.55422%,0.52993 38.55422% 39.15663%,0.53705 39.15663% 39.75904%,0.54414 39.75904% 40.36145%,0.55119 40.36145% 40.96386%,0.55819 40.96386% 41.56627%,0.56516 41.56627% 42.16867%,0.57209 42.16867% 42.77108%,0.57898 42.77108% 43.37349%,0.58583 43.37349% 43.97590%,0.59264 43.97590% 44.57831%,0.59941 44.57831% 45.18072%,0.60614 45.18072% 45.78313%,0.61282 45.78313% 46.38554%,0.61947 46.38554% 46.98795%,0.62608 46.98795% 47.59036%,0.63264 47.59036% 48.19277%,0.63917 48.19277% 48.79518%,0.64565 48.79518% 49.39759%,0.65209 49.39759% 50.00000%,0.65849 50.00000% 50.60241%,0.66485 50.60241% 51.20482%,0.67116 51.20482% 51.80723%,0.67743 51.80723% 52.40964%,0.68366 52.40964% 53.01205%,0.68984 53.01205% 53.61446%,0.69599 53.61446% 54.21687%,0.70208 54.21687% 54.81928%,0.70814 54.81928% 55.42169%,0.71415 55.42169% 56.02410%,0.72011 56.02410% 56.62651%,0.72603 56.62651% 57.22892%,0.73191 57.22892% 57.83133%,0.73774 57.83133% 58.43373%,0.74352 58.43373% 59.03614%,0.74926 59.03614% 59.63855%,0.75495 59.63855% 60.24096%,0.76060 60.24096% 60.84337%,0.76620 60.84337% 61.44578%,0.77175 61.44578% 62.04819%,0.77725 62.04819% 62.65060%,0.78271 62.65060% 63.25301%,0.78812 63.25301% 63.85542%,0.79348 63.85542% 64.45783%,0.79879 64.45783% 65.06024%,0.80405 65.06024% 65.66265%,0.80926 65.66265% 66.26506%,0.81442 66.26506% 66.86747%,0.81953 66.86747% 67.46988%,0.82459 67.46988% 68.07229%,0.82960 68.07229% 68.67470%,0.83456 68.67470% 69.27711%,0.83947 69.27711% 69.87952%,0.84432 69.87952% 70.48193%,0.84912 70.48193% 71.08434%,0.85386 71.08434% 71.68675%,0.85856 71.68675% 72.28916%,0.86319 72.28916% 72.89157%,0.86778 72.89157% 73.49398%,0.87230 73.49398% 74.09639%,0.87677 74.09639% 74.69880%,0.88119 74.69880% 75.30120%,0.88554 75.30120% 75.90361%,0.88984 75.90361% 76.50602%,0.89408 76.50602% 77.10843%,0.89826 77.10843% 77.71084%,0.90238 77.71084% 78.31325%,0.90644 78.31325% 78.91566%,0.91044 78.91566% 79.51807%,0.91437 79.51807% 80.12048%,0.91824 80.12048% 80.72289%,0.92205 80.72289% 81.32530%,0.92579 81.32530% 81.92771%,0.92947 81.92771% 82.53012%,0.93308 82.53012% 83.13253%,0.93662 83.13253% 83.73494%,0.94010 83.73494% 84.33735%,0.94350 84.33735% 84.93976%,0.94683 84.93976% 85.54217%,0.95009 85.54217% 86.14458%,0.95328 86.14458% 86.74699%,0.95639 86.74699% 87.34940%,0.95942 87.34940% 87.95181%,0.96238 87.95181% 88.55422%,0.96525 88.55422% 89.15663%,0.96805 89.15663% 89.75904%,0.97076 89.75904% 90.36145%,0.97338 90.36145% 90.96386%,0.97591 90.96386% 91.56627%,0.97836 91.56627% 92.16867%,0.98071 92.16867% 92.77108%,0.98296 92.77108% 93.37349%,0.98511 93.37349% 93.97590%,0.98715 93.97590% 94.57831%,0.98909 94.57831% 95.18072%,0.99091 95.18072% 95.78313%,0.99261 95.78313% 96.38554%,0.99418 96.38554% 96.98795%,0.99561 96.98795% 97.59036%,0.99690 97.59036% 98.19277%,0.99801 98.19277% 98.79518%,0.99894 98.79518% 99.39759%,0.99964 99.39759% 100.00000%,1 100%);--pace-light:linear(0.00000 0.00000% 1.44928%,0.02451 1.44928% 2.89855%,0.04877 2.89855% 4.34783%,0.07278 4.34783% 5.79710%,0.09654 5.79710% 7.24638%,0.12004 7.24638% 8.69565%,0.14329 8.69565% 10.14493%,0.16628 10.14493% 11.59420%,0.18901 11.59420% 13.04348%,0.21148 13.04348% 14.49275%,0.23369 14.49275% 15.94203%,0.25564 15.94203% 17.39130%,0.27732 17.39130% 18.84058%,0.29874 18.84058% 20.28986%,0.31990 20.28986% 21.73913%,0.34079 21.73913% 23.18841%,0.36140 23.18841% 24.63768%,0.38175 24.63768% 26.08696%,0.40183 26.08696% 27.53623%,0.42163 27.53623% 28.98551%,0.44116 28.98551% 30.43478%,0.46041 30.43478% 31.88406%,0.47938 31.88406% 33.33333%,0.49807 33.33333% 34.78261%,0.51648 34.78261% 36.23188%,0.53460 36.23188% 37.68116%,0.55244 37.68116% 39.13043%,0.56999 39.13043% 40.57971%,0.58725 40.57971% 42.02899%,0.60422 42.02899% 43.47826%,0.62089 43.47826% 44.92754%,0.63727 44.92754% 46.37681%,0.65334 46.37681% 47.82609%,0.66912 47.82609% 49.27536%,0.68459 49.27536% 50.72464%,0.69976 50.72464% 52.17391%,0.71462 52.17391% 53.62319%,0.72916 53.62319% 55.07246%,0.74339 55.07246% 56.52174%,0.75730 56.52174% 57.97101%,0.77090 57.97101% 59.42029%,0.78416 59.42029% 60.86957%,0.79710 60.86957% 62.31884%,0.80971 62.31884% 63.76812%,0.82199 63.76812% 65.21739%,0.83392 65.21739% 66.66667%,0.84551 66.66667% 68.11594%,0.85676 68.11594% 69.56522%,0.86765 69.56522% 71.01449%,0.87818 71.01449% 72.46377%,0.88836 72.46377% 73.91304%,0.89816 73.91304% 75.36232%,0.90759 75.36232% 76.81159%,0.91664 76.81159% 78.26087%,0.92530 78.26087% 79.71014%,0.93357 79.71014% 81.15942%,0.94143 81.15942% 82.60870%,0.94888 82.60870% 84.05797%,0.95591 84.05797% 85.50725%,0.96251 85.50725% 86.95652%,0.96865 86.95652% 88.40580%,0.97434 88.40580% 89.85507%,0.97955 89.85507% 91.30435%,0.98427 91.30435% 92.75362%,0.98846 92.75362% 94.20290%,0.99210 94.20290% 95.65217%,0.99516 95.65217% 97.10145%,0.99757 97.10145% 98.55072%,0.99925 98.55072% 100.00000%,1 100%);--pace-aura:linear(0.00000 0.00000% 0.66225%,0.00992 0.66225% 1.32450%,0.01980 1.32450% 1.98675%,0.02965 1.98675% 2.64901%,0.03947 2.64901% 3.31126%,0.04926 3.31126% 3.97351%,0.05901 3.97351% 4.63576%,0.06872 4.63576% 5.29801%,0.07841 5.29801% 5.96026%,0.08806 5.96026% 6.62252%,0.09767 6.62252% 7.28477%,0.10726 7.28477% 7.94702%,0.11680 7.94702% 8.60927%,0.12632 8.60927% 9.27152%,0.13580 9.27152% 9.93377%,0.14524 9.93377% 10.59603%,0.15465 10.59603% 11.25828%,0.16403 11.25828% 11.92053%,0.17337 11.92053% 12.58278%,0.18267 12.58278% 13.24503%,0.19194 13.24503% 13.90728%,0.20118 13.90728% 14.56954%,0.21038 14.56954% 15.23179%,0.21954 15.23179% 15.89404%,0.22867 15.89404% 16.55629%,0.23776 16.55629% 17.21854%,0.24682 17.21854% 17.88079%,0.25584 17.88079% 18.54305%,0.26482 18.54305% 19.20530%,0.27377 19.20530% 19.86755%,0.28268 19.86755% 20.52980%,0.29155 20.52980% 21.19205%,0.30039 21.19205% 21.85430%,0.30919 21.85430% 22.51656%,0.31795 22.51656% 23.17881%,0.32668 23.17881% 23.84106%,0.33537 23.84106% 24.50331%,0.34402 24.50331% 25.16556%,0.35263 25.16556% 25.82781%,0.36120 25.82781% 26.49007%,0.36974 26.49007% 27.15232%,0.37824 27.15232% 27.81457%,0.38670 27.81457% 28.47682%,0.39512 28.47682% 29.13907%,0.40350 29.13907% 29.80132%,0.41184 29.80132% 30.46358%,0.42015 30.46358% 31.12583%,0.42841 31.12583% 31.78808%,0.43663 31.78808% 32.45033%,0.44482 32.45033% 33.11258%,0.45296 33.11258% 33.77483%,0.46107 33.77483% 34.43709%,0.46913 34.43709% 35.09934%,0.47715 35.09934% 35.76159%,0.48514 35.76159% 36.42384%,0.49308 36.42384% 37.08609%,0.50098 37.08609% 37.74834%,0.50884 37.74834% 38.41060%,0.51665 38.41060% 39.07285%,0.52443 39.07285% 39.73510%,0.53216 39.73510% 40.39735%,0.53985 40.39735% 41.05960%,0.54750 41.05960% 41.72185%,0.55510 41.72185% 42.38411%,0.56267 42.38411% 43.04636%,0.57018 43.04636% 43.70861%,0.57766 43.70861% 44.37086%,0.58509 44.37086% 45.03311%,0.59248 45.03311% 45.69536%,0.59982 45.69536% 46.35762%,0.60712 46.35762% 47.01987%,0.61437 47.01987% 47.68212%,0.62158 47.68212% 48.34437%,0.62874 48.34437% 49.00662%,0.63586 49.00662% 49.66887%,0.64293 49.66887% 50.33113%,0.64995 50.33113% 50.99338%,0.65693 50.99338% 51.65563%,0.66386 51.65563% 52.31788%,0.67074 52.31788% 52.98013%,0.67758 52.98013% 53.64238%,0.68437 53.64238% 54.30464%,0.69111 54.30464% 54.96689%,0.69780 54.96689% 55.62914%,0.70444 55.62914% 56.29139%,0.71103 56.29139% 56.95364%,0.71757 56.95364% 57.61589%,0.72407 57.61589% 58.27815%,0.73051 58.27815% 58.94040%,0.73690 58.94040% 59.60265%,0.74324 59.60265% 60.26490%,0.74953 60.26490% 60.92715%,0.75576 60.92715% 61.58940%,0.76195 61.58940% 62.25166%,0.76808 62.25166% 62.91391%,0.77415 62.91391% 63.57616%,0.78017 63.57616% 64.23841%,0.78614 64.23841% 64.90066%,0.79206 64.90066% 65.56291%,0.79791 65.56291% 66.22517%,0.80371 66.22517% 66.88742%,0.80946 66.88742% 67.54967%,0.81515 67.54967% 68.21192%,0.82078 68.21192% 68.87417%,0.82635 68.87417% 69.53642%,0.83186 69.53642% 70.19868%,0.83731 70.19868% 70.86093%,0.84271 70.86093% 71.52318%,0.84804 71.52318% 72.18543%,0.85331 72.18543% 72.84768%,0.85852 72.84768% 73.50993%,0.86366 73.50993% 74.17219%,0.86874 74.17219% 74.83444%,0.87376 74.83444% 75.49669%,0.87871 75.49669% 76.15894%,0.88359 76.15894% 76.82119%,0.88841 76.82119% 77.48344%,0.89316 77.48344% 78.14570%,0.89783 78.14570% 78.80795%,0.90244 78.80795% 79.47020%,0.90698 79.47020% 80.13245%,0.91144 80.13245% 80.79470%,0.91583 80.79470% 81.45695%,0.92015 81.45695% 82.11921%,0.92439 82.11921% 82.78146%,0.92855 82.78146% 83.44371%,0.93263 83.44371% 84.10596%,0.93663 84.10596% 84.76821%,0.94055 84.76821% 85.43046%,0.94439 85.43046% 86.09272%,0.94814 86.09272% 86.75497%,0.95180 86.75497% 87.41722%,0.95537 87.41722% 88.07947%,0.95884 88.07947% 88.74172%,0.96222 88.74172% 89.40397%,0.96551 89.40397% 90.06623%,0.96869 90.06623% 90.72848%,0.97177 90.72848% 91.39073%,0.97474 91.39073% 92.05298%,0.97760 92.05298% 92.71523%,0.98034 92.71523% 93.37748%,0.98296 93.37748% 94.03974%,0.98545 94.03974% 94.70199%,0.98781 94.70199% 95.36424%,0.99002 95.36424% 96.02649%,0.99208 96.02649% 96.68874%,0.99397 96.68874% 97.35099%,0.99569 97.35099% 98.01325%,0.99720 98.01325% 98.67550%,0.99848 98.67550% 99.33775%,0.99946 99.33775% 100.00000%,1 100%);--pace-close:linear(0.00000 0.00000% 2.08333%,0.04123 2.08333% 4.16667%,0.08160 4.16667% 6.25000%,0.12109 6.25000% 8.33333%,0.15972 8.33333% 10.41667%,0.19748 10.41667% 12.50000%,0.23438 12.50000% 14.58333%,0.27040 14.58333% 16.66667%,0.30556 16.66667% 18.75000%,0.33984 18.75000% 20.83333%,0.37326 20.83333% 22.91667%,0.40582 22.91667% 25.00000%,0.43750 25.00000% 27.08333%,0.46832 27.08333% 29.16667%,0.49826 29.16667% 31.25000%,0.52734 31.25000% 33.33333%,0.55556 33.33333% 35.41667%,0.58290 35.41667% 37.50000%,0.60938 37.50000% 39.58333%,0.63498 39.58333% 41.66667%,0.65972 41.66667% 43.75000%,0.68359 43.75000% 45.83333%,0.70660 45.83333% 47.91667%,0.72873 47.91667% 50.00000%,0.75000 50.00000% 52.08333%,0.77040 52.08333% 54.16667%,0.78993 54.16667% 56.25000%,0.80859 56.25000% 58.33333%,0.82639 58.33333% 60.41667%,0.84332 60.41667% 62.50000%,0.85938 62.50000% 64.58333%,0.87457 64.58333% 66.66667%,0.88889 66.66667% 68.75000%,0.90234 68.75000% 70.83333%,0.91493 70.83333% 72.91667%,0.92665 72.91667% 75.00000%,0.93750 75.00000% 77.08333%,0.94748 77.08333% 79.16667%,0.95660 79.16667% 81.25000%,0.96484 81.25000% 83.33333%,0.97222 83.33333% 85.41667%,0.97873 85.41667% 87.50000%,0.98438 87.50000% 89.58333%,0.98915 89.58333% 91.66667%,0.99306 91.66667% 93.75000%,0.99609 93.75000% 95.83333%,0.99826 95.83333% 97.91667%,0.99957 97.91667% 100.00000%,1 100%);--pace-charge:linear(0.00000 0.00000% 2.77778%,0.04407 2.77778% 5.55556%,0.08740 5.55556% 8.33333%,0.12996 8.33333% 11.11111%,0.17176 11.11111% 13.88889%,0.21278 13.88889% 16.66667%,0.25302 16.66667% 19.44444%,0.29246 19.44444% 22.22222%,0.33109 22.22222% 25.00000%,0.36890 25.00000% 27.77778%,0.40588 27.77778% 30.55556%,0.44202 30.55556% 33.33333%,0.47730 33.33333% 36.11111%,0.51171 36.11111% 38.88889%,0.54523 38.88889% 41.66667%,0.57785 41.66667% 44.44444%,0.60955 44.44444% 47.22222%,0.64032 47.22222% 50.00000%,0.67012 50.00000% 52.77778%,0.69895 52.77778% 55.55556%,0.72678 55.55556% 58.33333%,0.75359 58.33333% 61.11111%,0.77934 61.11111% 63.88889%,0.80401 63.88889% 66.66667%,0.82757 66.66667% 69.44444%,0.84998 69.44444% 72.22222%,0.87120 72.22222% 75.00000%,0.89118 75.00000% 77.77778%,0.90987 77.77778% 80.55556%,0.92721 80.55556% 83.33333%,0.94312 83.33333% 86.11111%,0.95751 86.11111% 88.88889%,0.97027 88.88889% 91.66667%,0.98124 91.66667% 94.44444%,0.99019 94.44444% 97.22222%,0.99676 97.22222% 100.00000%,1 100%);--pace-catch:linear(0.00000 0.00000% 1.85185%,0.04387 1.85185% 3.70370%,0.08660 3.70370% 5.55556%,0.12819 5.55556% 7.40741%,0.16865 7.40741% 9.25926%,0.20800 9.25926% 11.11111%,0.24624 11.11111% 12.96296%,0.28338 12.96296% 14.81481%,0.31943 14.81481% 16.66667%,0.35440 16.66667% 18.51852%,0.38830 18.51852% 20.37037%,0.42113 20.37037% 22.22222%,0.45292 22.22222% 24.07407%,0.48366 24.07407% 25.92593%,0.51337 25.92593% 27.77778%,0.54206 27.77778% 29.62963%,0.56974 29.62963% 31.48148%,0.59641 31.48148% 33.33333%,0.62210 33.33333% 35.18519%,0.64680 35.18519% 37.03704%,0.67054 37.03704% 38.88889%,0.69332 38.88889% 40.74074%,0.71515 40.74074% 42.59259%,0.73605 42.59259% 44.44444%,0.75602 44.44444% 46.29630%,0.77509 46.29630% 48.14815%,0.79326 48.14815% 50.00000%,0.81054 50.00000% 51.85185%,0.82694 51.85185% 53.70370%,0.84249 53.70370% 55.55556%,0.85719 55.55556% 57.40741%,0.87106 57.40741% 59.25926%,0.88410 59.25926% 61.11111%,0.89635 61.11111% 62.96296%,0.90780 62.96296% 64.81481%,0.91848 64.81481% 66.66667%,0.92840 66.66667% 68.51852%,0.93758 68.51852% 70.37037%,0.94603 70.37037% 72.22222%,0.95378 72.22222% 74.07407%,0.96083 74.07407% 75.92593%,0.96721 75.92593% 77.77778%,0.97294 77.77778% 79.62963%,0.97804 79.62963% 81.48148%,0.98253 81.48148% 83.33333%,0.98643 83.33333% 85.18519%,0.98977 85.18519% 87.03704%,0.99258 87.03704% 88.88889%,0.99487 88.88889% 90.74074%,0.99669 90.74074% 92.59259%,0.99806 92.59259% 94.44444%,0.99903 94.44444% 96.29630%,0.99963 96.29630% 98.14815%,0.99993 98.14815% 100.00000%,1 100%);--pace-out:linear(0.00000 0.00000% 4.16667%,0.06980 4.16667% 8.33333%,0.13750 8.33333% 12.50000%,0.20308 12.50000% 16.66667%,0.26651 16.66667% 20.83333%,0.32776 20.83333% 25.00000%,0.38680 25.00000% 29.16667%,0.44358 29.16667% 33.33333%,0.49807 33.33333% 37.50000%,0.55022 37.50000% 41.66667%,0.60000 41.66667% 45.83333%,0.64735 45.83333% 50.00000%,0.69221 50.00000% 54.16667%,0.73453 54.16667% 58.33333%,0.77424 58.33333% 62.50000%,0.81126 62.50000% 66.66667%,0.84551 66.66667% 70.83333%,0.87689 70.83333% 75.00000%,0.90527 75.00000% 79.16667%,0.93052 79.16667% 83.33333%,0.95245 83.33333% 87.50000%,0.97084 87.50000% 91.66667%,0.98537 91.66667% 95.83333%,0.99550 95.83333% 100.00000%,1 100%);--pace-in:linear(0.00000 0.00000% 2.77778%,0.06538 2.77778% 5.55556%,0.12819 5.55556% 8.33333%,0.18846 8.33333% 11.11111%,0.24624 11.11111% 13.88889%,0.30154 13.88889% 16.66667%,0.35440 16.66667% 19.44444%,0.40485 19.44444% 22.22222%,0.45292 22.22222% 25.00000%,0.49864 25.00000% 27.77778%,0.54206 27.77778% 30.55556%,0.58320 30.55556% 33.33333%,0.62210 33.33333% 36.11111%,0.65879 36.11111% 38.88889%,0.69332 38.88889% 41.66667%,0.72572 41.66667% 44.44444%,0.75602 44.44444% 47.22222%,0.78428 47.22222% 50.00000%,0.81054 50.00000% 52.77778%,0.83482 52.77778% 55.55556%,0.85719 55.55556% 58.33333%,0.87768 58.33333% 61.11111%,0.89635 61.11111% 63.88889%,0.91324 63.88889% 66.66667%,0.92840 66.66667% 69.44444%,0.94189 69.44444% 72.22222%,0.95378 72.22222% 75.00000%,0.96410 75.00000% 77.77778%,0.97294 77.77778% 80.55556%,0.98036 80.55556% 83.33333%,0.98643 83.33333% 86.11111%,0.99124 86.11111% 88.88889%,0.99487 88.88889% 91.66667%,0.99743 91.66667% 94.44444%,0.99903 94.44444% 97.22222%,0.99982 97.22222% 100.00000%,1 100%);--pace-dissolve:linear(0.00000 0.00000% 1.35135%,0.01351 1.35135% 2.70270%,0.02703 2.70270% 4.05405%,0.04054 4.05405% 5.40541%,0.05405 5.40541% 6.75676%,0.06757 6.75676% 8.10811%,0.08108 8.10811% 9.45946%,0.09459 9.45946% 10.81081%,0.10811 10.81081% 12.16216%,0.12162 12.16216% 13.51351%,0.13514 13.51351% 14.86486%,0.14865 14.86486% 16.21622%,0.16216 16.21622% 17.56757%,0.17568 17.56757% 18.91892%,0.18919 18.91892% 20.27027%,0.20270 20.27027% 21.62162%,0.21622 21.62162% 22.97297%,0.22973 22.97297% 24.32432%,0.24324 24.32432% 25.67568%,0.25676 25.67568% 27.02703%,0.27027 27.02703% 28.37838%,0.28378 28.37838% 29.72973%,0.29730 29.72973% 31.08108%,0.31081 31.08108% 32.43243%,0.32432 32.43243% 33.78378%,0.33784 33.78378% 35.13514%,0.35135 35.13514% 36.48649%,0.36486 36.48649% 37.83784%,0.37838 37.83784% 39.18919%,0.39189 39.18919% 40.54054%,0.40541 40.54054% 41.89189%,0.41892 41.89189% 43.24324%,0.43243 43.24324% 44.59459%,0.44595 44.59459% 45.94595%,0.45946 45.94595% 47.29730%,0.47297 47.29730% 48.64865%,0.48649 48.64865% 50.00000%,0.50000 50.00000% 51.35135%,0.51351 51.35135% 52.70270%,0.52703 52.70270% 54.05405%,0.54054 54.05405% 55.40541%,0.55405 55.40541% 56.75676%,0.56757 56.75676% 58.10811%,0.58108 58.10811% 59.45946%,0.59459 59.45946% 60.81081%,0.60811 60.81081% 62.16216%,0.62162 62.16216% 63.51351%,0.63514 63.51351% 64.86486%,0.64865 64.86486% 66.21622%,0.66216 66.21622% 67.56757%,0.67568 67.56757% 68.91892%,0.68919 68.91892% 70.27027%,0.70270 70.27027% 71.62162%,0.71622 71.62162% 72.97297%,0.72973 72.97297% 74.32432%,0.74324 74.32432% 75.67568%,0.75676 75.67568% 77.02703%,0.77027 77.02703% 78.37838%,0.78378 78.37838% 79.72973%,0.79730 79.72973% 81.08108%,0.81081 81.08108% 82.43243%,0.82432 82.43243% 83.78378%,0.83784 83.78378% 85.13514%,0.85135 85.13514% 86.48649%,0.86486 86.48649% 87.83784%,0.87838 87.83784% 89.18919%,0.89189 89.18919% 90.54054%,0.90541 90.54054% 91.89189%,0.91892 91.89189% 93.24324%,0.93243 93.24324% 94.59459%,0.94595 94.59459% 95.94595%,0.95946 95.94595% 97.29730%,0.97297 97.29730% 98.64865%,0.98649 98.64865% 100.00000%,1 100%);--pace-breath:steps(288, jump-end)}
+}

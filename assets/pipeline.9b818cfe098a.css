@@ -1,0 +1,3 @@
+.pipeline-stage{position:relative;display:grid;place-items:center;padding:clamp(18px,3vw,30px);min-height:260px;background:radial-gradient(120% 90% at 50% 0%,rgba(255,150,80,.08),transparent 70%)}
+.pipeline-stage a{display:block;width:100%}
+.pipeline-stage img{display:block;width:100%;height:auto;max-width:560px;margin:0 auto}

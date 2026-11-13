@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 290" width="560" height="290" role="img">
+<title>REES46 pipeline: raw events to bronze, silver and gold layers, then a ranking model served through FastAPI</title>
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 9 5 1 9" fill="none" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a14"/><stop offset="1" stop-color="#17100d"/></linearGradient></defs>
+<path d="M176 73.0 L197 73.0" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" marker-end="url(#a)" opacity=".9"/>
+<path d="M361 73.0 L382 73.0" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" marker-end="url(#a)" opacity=".9"/>
+<path d="M465.0 112 L465.0 170" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" marker-end="url(#a)" opacity=".9"/>
+<path d="M384 211.0 L363 211.0" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" marker-end="url(#a)" opacity=".9"/>
+<path d="M199 211.0 L178 211.0" stroke="#ff9f5a" stroke-width="1.6" stroke-linecap="round" marker-end="url(#a)" opacity=".9"/>
+<rect x="20" y="40" width="150" height="66" rx="10" fill="url(#g)" stroke="#ff9f5a" stroke-width="1.4"/>
+<text x="34" y="65" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">RAW EVENTS</text>
+<text x="34" y="88" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#ffc38f">411.7M</text>
+<rect x="205" y="40" width="150" height="66" rx="10" fill="url(#g)" stroke="#6b4a3a" stroke-width="1"/>
+<text x="219" y="65" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">BRONZE</text>
+<text x="219" y="88" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#fbeedd">Parquet</text>
+<rect x="390" y="40" width="150" height="66" rx="10" fill="url(#g)" stroke="#6b4a3a" stroke-width="1"/>
+<text x="404" y="65" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">SILVER</text>
+<text x="404" y="88" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#fbeedd">410.3M validated</text>
+<rect x="390" y="178" width="150" height="66" rx="10" fill="url(#g)" stroke="#6b4a3a" stroke-width="1"/>
+<text x="404" y="203" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">GOLD</text>
+<text x="404" y="226" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#fbeedd">Monthly partitions</text>
+<rect x="205" y="178" width="150" height="66" rx="10" fill="url(#g)" stroke="#ff9f5a" stroke-width="1.4"/>
+<text x="219" y="203" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">RANKER</text>
+<text x="219" y="226" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#ffc38f">+46% MRR@20</text>
+<rect x="20" y="178" width="150" height="66" rx="10" fill="url(#g)" stroke="#6b4a3a" stroke-width="1"/>
+<text x="34" y="203" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="10" letter-spacing="1.6" fill="#c9a48c">SERVING</text>
+<text x="34" y="226" font-family="system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="14.5" font-weight="600" fill="#fbeedd">FastAPI</text>
+<text x="20" y="278" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="1.4" fill="#8f7566">DUCKDB · PARQUET · RESTARTABLE BY MONTH AND SESSION BUCKET</text>
+</svg>
